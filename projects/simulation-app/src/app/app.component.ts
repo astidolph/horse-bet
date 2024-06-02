@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HorseManagementService } from './services/horse-management.service';
-import { UserService } from './services/user-service';
 import { CourseComponent } from './components/course/course.component';
 import { OddsPanelComponent } from './components/odds-panel/odds-panel.component';
 import { BettingPanelComponent } from './components/betting-panel/betting-panel.component';
+import { UserService } from './services/user-service';
 
 @Component({
   selector: 'app-root',
@@ -35,11 +35,6 @@ export class AppComponent implements OnInit {
     this.userService
       .hasGameStarted()
       .subscribe((gameStarted) => (this.gameStarted = gameStarted));
-
-    // MIMIC THE USER OF PHONE TO ADD NEW USERS
-    this.userService.sendNewUser('fakeUser1');
-    this.userService.sendNewUser('fakeUser2');
-    this.userService.sendNewUser('fakeUser3');
   }
 
   startGame() {
