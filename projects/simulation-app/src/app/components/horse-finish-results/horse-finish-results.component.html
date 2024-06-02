@@ -1,0 +1,14 @@
+<table>
+    <thead>
+    <tr>
+        <th>RESULTS</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let result of staggeredResults; let idx = index">
+        <td>{{ idx + 1 }}</td>
+        <td>{{ result.name }}</td>
+        <td>{{ result.speed * 1000 | date:'mm:ss' }}</td>
+    </tr>
+    </tbody>
+</table>

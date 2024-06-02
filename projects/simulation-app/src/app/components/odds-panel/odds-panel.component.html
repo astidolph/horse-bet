@@ -1,0 +1,32 @@
+<div class="odds-container">
+    <div class="odds panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Colour:</th>
+              <th>Horse:</th>
+              <th [colSpan]="3">Odds:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let horse of horses | orderByOdds">
+              <td class="text-center"><span class="circle" [ngStyle]="{ background: horse.colour }"></span></td>
+              <td>{{ horse.name }}</td>
+              <td>{{ horse.percentageOdds | number:'1.2-2' }}%</td>
+              <td>{{ horse.fractionalOdds }}</td>
+              <td>{{ horse.decimalOdds | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="race-button-container">
+          <button type="button" (click)="startRace()">Race!</button>
+        </div>
+    </div>
+    <div class="results-container panel" *ngIf="raceStarted | async">
+      <app-horse-finish-results></app-horse-finish-results>
+    </div>
+    <div class="bets-container panel" *ngIf="raceStarted | async">
+      <app-bet-results></app-bet-results>
+    </div>
+</div>

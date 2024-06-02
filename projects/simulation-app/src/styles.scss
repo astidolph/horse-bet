@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+body,
+html {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Avenir Next", "Segoe UI", "Lucida Grande", sans-serif;
+}
+
+.circle {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
+
+// tables
+
+td,
+th {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+th {
+  text-align: left;
+  font-weight: 300;
+  font-size: 20px;
+  font-size: 1.25rem;
+}

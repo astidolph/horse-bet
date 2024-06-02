@@ -1,0 +1,34 @@
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Total Bet</th>
+        <th>Bets</th>
+        <th>Gained/Lost</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let playerBet of playerBets; let idx = index">
+        <td>{{ playerBet.player }}</td>
+        <td>{{ sumPlayerBets(playerBet.bets) }}</td>
+        <td>
+            <div class="circle bet" [ngStyle]="{ background: horseBet.horse.colour }" *ngFor="let horseBet of getHorsesBetOn(playerBet)">
+                <span>{{ horseBet.bet }}</span>
+                <span class="horse-name">{{ horseBet.horse.name }}</span>
+            </div>
+        </td>
+        <td>
+            <div class="winnings" 
+                *ngIf="(raceFinished$ | async); else racing"
+                [ngClass]="{'negative': playerBet.winnings < 0, 'positive' : playerBet.winnings > 0 }">
+                {{ playerBet.winnings | number:'1.2-2' }}
+                <span class="arrow up positive" *ngIf="playerBet.winnings > 0"></span>
+                <span class="arrow down negative" *ngIf="playerBet.winnings < 0"></span>
+            </div>
+            <ng-template #racing>
+                <div class="racing-load"></div>
+            </ng-template>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,77 @@
+.circle.bet {
+    text-align: center;
+    position: relative;
+    padding: 5px;
+
+    .horse-name {
+        display: none;
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        border: 1px solid black;
+        padding: 5px;
+    }
+}
+
+.circle.bet:hover {
+    .horse-name {
+        display: block;
+    }
+}
+
+.winnings {
+    position: relative;
+
+    &.negative {
+        color: red;
+    }
+
+    &.positive {
+        color: green;
+    }
+}
+
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    right: 0;
+    position: absolute;
+    top: 25%;
+  }
+  
+  .up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+  }
+  
+  .down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+
+  .racing-load:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
+    animation: ellipsis steps(4,end) 900ms infinite;
+    content: "\2026"; /* ascii code for the ellipsis character */
+    width: 0px;
+    font-size: 30px;
+  }
+  
+  @keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }
+  
+  @-webkit-keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }

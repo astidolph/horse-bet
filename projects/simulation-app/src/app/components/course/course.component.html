@@ -1,0 +1,41 @@
+<div class="course">
+  <div class="horse-container">
+    <div
+      class="horse"
+      *ngFor="let horse of horses; let idx = index"
+      [style.top]="(idx + 0.5) * 5 + '%'"
+      [class.gallop]="(raceStarted$ | async) && !(raceFinished$ | async)"
+      [@horseMove]="{
+        value: (raceStarted$ | async),
+        params: { timingFunction: horse.timingFunction, speed: horse.speed }
+      }"
+    >
+      <span class="horse-name">{{ horse.name }}</span>
+      <div class="body">
+        <div class="saddle" [ngStyle]="{ background: horse.colour }"></div>
+        <div class="tail"></div>
+        <div class="neck">
+          <div class="head">
+            <div class="ear"></div>
+            <div class="eye">
+              <div class="pupil"></div>
+            </div>
+          </div>
+        </div>
+        <div class="thigh z-front back">
+          <div class="calf"></div>
+        </div>
+        <div class="thigh z-back back">
+          <div class="calf"></div>
+        </div>
+        <div class="thigh z-front front">
+          <div class="calf"></div>
+        </div>
+        <div class="thigh z-back front">
+          <div class="calf"></div>
+        </div>
+      </div>
+    </div>
+    <div class="finish-line"></div>
+  </div>
+</div>

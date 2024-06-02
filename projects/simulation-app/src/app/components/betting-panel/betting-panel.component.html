@@ -1,0 +1,80 @@
+<p>
+  Players:
+  <span
+    class="pill"
+    *ngFor="let player of players"
+    (click)="selectPlayersBets(player)"
+    >{{ player }}</span
+  >
+</p>
+<div *ngIf="selectedPlayersBet">
+  <p>
+    <b>{{ selectedPlayersBet.player }}'s</b> bets
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Horse</th>
+        <th>Amount Currently Bet</th>
+        <th>Place a bet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let playerBet of selectedPlayersBet.bets">
+        <td>{{ playerBet.horse.name }}</td>
+        <td>{{ playerBet.bet }}</td>
+        <td>
+          <span
+            class="pill"
+            (click)="
+              setPlayerBet(selectedPlayersBet.player, playerBet.horse, 0)
+            "
+            >0</span
+          >
+          <span
+            class="pill"
+            (click)="
+              setPlayerBet(selectedPlayersBet.player, playerBet.horse, 5)
+            "
+            >5</span
+          >
+          <span
+            class="pill"
+            (click)="
+              setPlayerBet(selectedPlayersBet.player, playerBet.horse, 10)
+            "
+            >10</span
+          >
+          <span
+            class="pill"
+            (click)="
+              setPlayerBet(selectedPlayersBet.player, playerBet.horse, 20)
+            "
+            >20</span
+          >
+          <span
+            class="pill"
+            (click)="
+              setPlayerBet(selectedPlayersBet.player, playerBet.horse, 50)
+            "
+            >50</span
+          >
+          <span
+            class="pill"
+            (click)="
+              setPlayerBet(selectedPlayersBet.player, playerBet.horse, 100)
+            "
+            >100</span
+          >
+          <span
+            class="pill"
+            (click)="
+              setPlayerBet(selectedPlayersBet.player, playerBet.horse, 200)
+            "
+            >200</span
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
