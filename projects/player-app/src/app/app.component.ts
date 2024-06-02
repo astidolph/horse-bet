@@ -14,7 +14,12 @@ import { UserService } from './services/user-service';
 export class AppComponent {
   name = '';
   inLobby = false;
-  constructor(private userService: UserService) {}
+  gameStarted = false;
+  constructor(private userService: UserService) {
+    this.userService
+      .hasGameStarted()
+      .subscribe((gameStarted) => (this.gameStarted = gameStarted));
+  }
   submit(name: string) {
     if (!name) return;
     this.userService.sendNewUser(name);
