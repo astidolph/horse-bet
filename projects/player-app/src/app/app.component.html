@@ -1,3 +1,6 @@
+@if (inLobby) { Name: {{ name }}
+<p>WAIT FOR GAME TO START</p>
+} @else {
 <input
   type="text"
   placeholder="Enter your name"
@@ -5,3 +8,5 @@
   (keydown.enter)="submit(name)"
 />
 <button type="submit" (click)="submit(name)">Submit</button>
+
+}

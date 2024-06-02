@@ -13,9 +13,11 @@ import { UserService } from './services/user-service';
 })
 export class AppComponent {
   name = '';
+  inLobby = false;
   constructor(private userService: UserService) {}
   submit(name: string) {
     if (!name) return;
     this.userService.sendNewUser(name);
+    this.inLobby = true;
   }
 }

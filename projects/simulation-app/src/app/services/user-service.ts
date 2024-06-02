@@ -12,11 +12,6 @@ export class UserService {
 
   socket = io('http://localhost:3000');
 
-  public sendNewUser(newUser: string) {
-    console.log('sendNewUser: ', newUser);
-    this.socket.emit('newUser', newUser);
-  }
-
   public getNewUser = () => {
     this.socket.on('newUser', (user) => {
       this.userList$.next(user);
