@@ -15,6 +15,7 @@ export class AppComponent {
   name = '';
   constructor(private userService: UserService) {}
   submit(name: string) {
+    if (!name) return;
     this.userService.sendNewUser(name);
   }
 }

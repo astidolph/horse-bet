@@ -1,2 +1,7 @@
-<input type="text" placeholder="Enter your name" [(ngModel)]="name" />
+<input
+  type="text"
+  placeholder="Enter your name"
+  [(ngModel)]="name"
+  (keydown.enter)="submit(name)"
+/>
 <button type="submit" (click)="submit(name)">Submit</button>
