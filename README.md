@@ -1,27 +1,27 @@
 # HorseBet
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
+Project built as a bit of fun attempting to mimic how Jackbox party games operate. It is a virtual horse racing game where horses are randomly generated with names and odds each round, players are given a pot of money they can use to make bets.
 
-## Development server
+There are three parts to this application:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. `simulation-app` the host application that runs the horse racing simulation.
+2. `player-app` the application that players of the game will use in order to make bets on horses and view their money.
+3. `server` using `socket.io` to provide real-time state changes between the `player-app` and `simulation-app` along with SQLITE for storage.
 
-## Code scaffolding
+## Getting up and running
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Running the simulation
 
-## Build
+Run `npm run start` which will run the `simulation-app` on `localhost:4200`. The application will automatically reload if you change any of the source files.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+If you simply want to use the simulation you can run this app alone by starting the game without players.
 
-## Running unit tests
+### Running the server
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run server` you should receive a message `listening on port 3000`.
 
-## Running end-to-end tests
+### Running the player app
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Run `npm run start:playerApp` which will run the `player-app` on `localhost:4201`. The application will automatically reload if you change any of the source files.
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The player app will require the server to be ran otherwise this application will not be very useful.
