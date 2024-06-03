@@ -27,6 +27,42 @@ function setupSocketHandlers(io, db) {
     socket.on("disconnect", () => {
       console.log("a user disconnected!");
     });
+
+    socket.on("generateHorses", async (horses) => {
+      console.log("generate horses: ", JSON.stringify(horses));
+
+      // Start a transaction
+      await db.run("BEGIN TRANSACTION");
+
+      try {
+        // Insert each horse one by one
+        for (const horse of horses) {
+          await db.run(
+            "INSERT INTO horse (name, odds, percentageOdds, fractionalOdds, decimalOdds, colour, speed, timingFunction) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [
+              horse.name,
+              horse.odds,
+              horse.percentageOdds,
+              horse.fractionalOdds,
+              horse.decimalOdds,
+              horse.colour,
+              horse.speed,
+              horse.timingFunction,
+            ]
+          );
+        }
+
+        // Commit the transaction
+        await db.run("COMMIT");
+      } catch (e) {
+        // Rollback the transaction in case of an error
+        await db.run("ROLLBACK");
+        console.error("Failed to save generated horses:", e);
+        return;
+      }
+
+      io.emit("horsesGenerated", horses);
+    });
   });
 }
 

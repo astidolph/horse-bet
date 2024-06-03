@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, timeout } from 'rxjs';
 import { Horse } from '../classes/horse';
 import { horseNames } from '../../assets/horse-names';
+import { io } from 'socket.io-client';
 
 const RACE_LENGTH = 90;
 const NUM_HORSES = 10;
@@ -12,6 +13,8 @@ const HORSE_FINISH_TIME_DIFFERENCIAL = 40;
   providedIn: 'root',
 })
 export class HorseManagementService {
+  socket = io('http://localhost:3000');
+
   private _horses: Horse[] = [];
   private _results: Horse[] = [];
   private raceStarted$ = new BehaviorSubject<boolean>(false);
@@ -63,6 +66,8 @@ export class HorseManagementService {
       h.fractionalOdds = this.generateFractionalOdds(this.totalOdds, h.odds);
       h.decimalOdds = this.generateDecimalOdds(this.totalOdds, h.odds);
     });
+
+    this.socket.emit('generateHorses', this.horses);
 
     this.generateOddsTable();
   }
