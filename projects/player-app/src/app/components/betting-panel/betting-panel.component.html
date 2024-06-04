@@ -1,1 +1,27 @@
-<p>betting-panel works!</p>
+<p>Money: {{ money }}</p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount Bet</th>
+      <th>Place a bet</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (horse of horses; track $index) {
+    <tr>
+      <td>{{ horse.name }}</td>
+      <td>0</td>
+      <td>
+        <span class="pill" (click)="setPlayerBet(horse.name, 0)">0</span>
+        <span class="pill" (click)="setPlayerBet(horse.name, 5)">5</span>
+        <span class="pill" (click)="setPlayerBet(horse.name, 10)">10</span>
+        <span class="pill" (click)="setPlayerBet(horse.name, 20)">20</span>
+        <span class="pill" (click)="setPlayerBet(horse.name, 50)">50</span>
+        <span class="pill" (click)="setPlayerBet(horse.name, 100)">100</span>
+        <span class="pill" (click)="setPlayerBet(horse.name, 200)">200</span>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>

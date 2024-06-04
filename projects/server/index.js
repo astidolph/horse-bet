@@ -27,7 +27,7 @@ async function main() {
   app.get("/api/horses", async (req, res) => {
     try {
       const rows = await db.all("SELECT * FROM horse");
-      res.json({ horses: rows });
+      res.json(rows);
     } catch (err) {
       console.error("Database query error:", err.message);
       res.status(500).json({ error: err.message });

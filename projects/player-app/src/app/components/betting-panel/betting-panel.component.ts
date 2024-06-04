@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { HorseManagementService } from '../../services/horse-management.service';
+import { CommonModule } from '@angular/common';
+import { Horse } from '../../models/horse';
 
 @Component({
   selector: 'app-betting-panel',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './betting-panel.component.html',
   styleUrl: './betting-panel.component.scss',
 })
 export class BettingPanelComponent implements OnInit {
-  horses: any[] = [];
+  horses: Horse[] = [];
+  money = 2000;
 
   constructor(private horseService: HorseManagementService) {}
 
@@ -23,5 +26,9 @@ export class BettingPanelComponent implements OnInit {
         console.error('Error fetching horses:', error);
       }
     );
+  }
+
+  setPlayerBet(horseId: string, bet: number) {
+    // NOT IMPLEMENTED YET
   }
 }
