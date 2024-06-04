@@ -34,6 +34,26 @@ async function main() {
     }
   });
 
+  app.get("/api/gameState", async (req, res) => {
+    try {
+      const rows = await db.all("SELECT * FROM gameState");
+      res.json(rows);
+    } catch (err) {
+      console.error("Database query error:", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/users", async (req, res) => {
+    try {
+      const rows = await db.all("SELECT * FROM user");
+      res.json(rows);
+    } catch (err) {
+      console.error("Database query error:", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   app.get("/api/test", (req, res) => {
     res.json({ message: "Test endpoint works!" });
   });
