@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
 import { UserService } from './services/user-service';
+import { BettingPanelComponent } from './components/betting-panel/betting-panel.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet],
+  imports: [CommonModule, FormsModule, BettingPanelComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
