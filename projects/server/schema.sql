@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS playerBets;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS gameState;
 DROP TABLE IF EXISTS horse;
@@ -22,3 +23,10 @@ CREATE TABLE IF NOT EXISTS horse (
     speed INTEGER,
     timingFunction TEXT
 );
+
+CREATE TABLE IF NOT EXISTS playerBets (
+    horseId INTEGER,
+    userId INTEGER,
+    amount INTEGER,
+    PRIMARY KEY (horseId, userId)
+)

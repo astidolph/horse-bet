@@ -63,6 +63,25 @@ function setupSocketHandlers(io, db) {
 
       io.emit("horsesGenerated", horses);
     });
+
+    socket.on("makeBet", async (bet) => {
+      const { playerId, amount, horseId } = bet;
+      console.log(`Player ${playerId} betting ${amount} on ${horseId}`);
+      try {
+        await db.run(
+          "INSERT OR REPLACE INTO playerBets (horseId, userId, amount) VALUES (?, ?, ?)",
+          [horseId, playerId, amount]
+        );
+      } catch (e) {
+        console.error("Failed to make bet:", e);
+        return;
+      }
+      io.emit("betMade", {
+        horseId: horseId,
+        playerId: playerId,
+        amount: amount,
+      });
+    });
   });
 }
 
