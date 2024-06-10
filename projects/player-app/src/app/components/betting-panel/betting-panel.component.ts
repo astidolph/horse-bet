@@ -14,7 +14,8 @@ import { HorseWithBet } from '../../models/player-bet';
 })
 export class BettingPanelComponent implements OnInit {
   horses: HorseWithBet[] = [];
-  money = 2000;
+  money = 1000;
+  playerId = 1;
 
   constructor(
     private horseService: HorseManagementService,
@@ -34,12 +35,27 @@ export class BettingPanelComponent implements OnInit {
   }
 
   setPlayerBet(horseId: number, amount: number) {
+    const moneyAfterBet = this.moneyAfterBet(horseId, amount);
+    if (moneyAfterBet < 0) return;
+
     this.bettingService.makeBet(1, horseId, amount);
+
+    this.money = moneyAfterBet;
     const horse = this.horses.find((h) => h.id === horseId);
     if (horse) {
       horse.betAmount = amount;
     } else {
       console.error(`Horse with id ${horseId} not found.`);
     }
+  }
+
+  private moneyAfterBet(horseId: number, betAmount: number): number {
+    console.log(
+      `${this.playerId} bet amount: ${betAmount} current money: ${this.money}`
+    );
+    const currentHorseBet = this.horses.find(
+      (h) => h.id === horseId
+    )?.betAmount;
+    return this.money - betAmount + (currentHorseBet ?? 0);
   }
 }
