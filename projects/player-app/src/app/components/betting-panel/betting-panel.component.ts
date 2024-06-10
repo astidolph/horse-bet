@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HorseManagementService } from '../../services/horse-management.service';
 import { CommonModule } from '@angular/common';
 import { Horse } from '../../models/horse';
+import { BettingService } from '../../services/betting.service';
+import { HorseWithBet } from '../../models/player-bet';
 
 @Component({
   selector: 'app-betting-panel',
@@ -11,16 +13,19 @@ import { Horse } from '../../models/horse';
   styleUrl: './betting-panel.component.scss',
 })
 export class BettingPanelComponent implements OnInit {
-  horses: Horse[] = [];
+  horses: HorseWithBet[] = [];
   money = 2000;
 
-  constructor(private horseService: HorseManagementService) {}
+  constructor(
+    private horseService: HorseManagementService,
+    private bettingService: BettingService
+  ) {}
 
   ngOnInit(): void {
     this.horseService.getHorses().subscribe(
-      (data) => {
-        console.log(data);
-        this.horses = data;
+      (horses) => {
+        console.log(horses);
+        this.horses = horses.map((h) => ({ ...h, betAmount: 0 }));
       },
       (error) => {
         console.error('Error fetching horses:', error);
@@ -28,7 +33,13 @@ export class BettingPanelComponent implements OnInit {
     );
   }
 
-  setPlayerBet(horseId: string, bet: number) {
-    // NOT IMPLEMENTED YET
+  setPlayerBet(horseId: number, amount: number) {
+    this.bettingService.makeBet(1, horseId, amount);
+    const horse = this.horses.find((h) => h.id === horseId);
+    if (horse) {
+      horse.betAmount = amount;
+    } else {
+      console.error(`Horse with id ${horseId} not found.`);
+    }
   }
 }
