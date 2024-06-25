@@ -36,9 +36,18 @@ export class BettingPanelComponent implements OnInit {
 
   setPlayerBet(horseId: number, amount: number) {
     const moneyAfterBet = this.moneyAfterBet(horseId, amount);
-    if (moneyAfterBet < 0) return;
+    if (moneyAfterBet < 0) {
+      console.log(
+        `${this.playerId} bet amount: ${amount} but could not afford it!`
+      );
+      return;
+    }
 
     this.bettingService.makeBet(1, horseId, amount);
+
+    console.log(
+      `${this.playerId} bet amount: ${amount} current money: ${this.money}`
+    );
 
     this.money = moneyAfterBet;
     const horse = this.horses.find((h) => h.id === horseId);
@@ -49,13 +58,10 @@ export class BettingPanelComponent implements OnInit {
     }
   }
 
-  private moneyAfterBet(horseId: number, betAmount: number): number {
-    console.log(
-      `${this.playerId} bet amount: ${betAmount} current money: ${this.money}`
-    );
+  private moneyAfterBet(horseId: number, amount: number): number {
     const currentHorseBet = this.horses.find(
       (h) => h.id === horseId
     )?.betAmount;
-    return this.money - betAmount + (currentHorseBet ?? 0);
+    return this.money - amount + (currentHorseBet ?? 0);
   }
 }
