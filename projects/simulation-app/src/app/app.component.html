@@ -14,9 +14,7 @@
   <h1>HORSE GAME</h1>
   <ul>
     @for (user of userList; track $index) {
-    <li>
-      {{ user }}
-    </li>
+    <li>{{ user.id }} : {{ user.name }}</li>
     }
   </ul>
   <button type="button" (click)="startGame()">Start Game</button>

@@ -2,15 +2,15 @@ function setupSocketHandlers(io, db) {
   io.on("connection", (socket) => {
     console.log("a user connected");
 
-    socket.on("newUser", async (newUser) => {
-      console.log(newUser);
+    socket.on("newUser", (newUser) => {
       try {
-        await db.run("INSERT INTO user (name) VALUES (?)", newUser);
-      } catch (e) {
-        console.error("Failed to insert new user:", e);
-        return;
+        const result = db.run("INSERT INTO user (name) VALUES (?)", [newUser]);
+        const userId = result.lastID;
+        console.log("New DB user added:", { id: userId, name: newUser });
+        io.emit("newUser", { id: userId, name: newUser });
+      } catch (err) {
+        console.error("Failed to insert new user:", err);
       }
-      io.emit("newUser", newUser);
     });
 
     socket.on("startGame", async () => {

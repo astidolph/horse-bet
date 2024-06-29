@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { io } from 'socket.io-client';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  public userList$: BehaviorSubject<string> = new BehaviorSubject('');
-  public gameStarted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public userList$ = new BehaviorSubject<User[]>([]);
+  public gameStarted$ = new BehaviorSubject<boolean>(false);
   constructor() {}
 
   socket = io('http://localhost:3000');
