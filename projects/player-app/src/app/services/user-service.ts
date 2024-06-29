@@ -1,30 +1,28 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { User } from '../models/user';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private apiUrl = 'http://localhost:3000/api/users';
+
   public userList$ = new BehaviorSubject<User[]>([]);
   public gameStarted$ = new BehaviorSubject<boolean>(false);
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   socket = io('http://localhost:3000');
 
-  public sendNewUser(newUser: string) {
-    console.log('sendNewUser: ', newUser);
-    this.socket.emit('newUser', newUser);
+  public sendNewUser(newUser: string): Observable<User> {
+    return this.http.post<User>(
+      this.apiUrl,
+      { name: newUser },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
   }
-
-  public getNewUser = () => {
-    this.socket.on('newUser', (user) => {
-      this.userList$.next(user);
-    });
-
-    return this.userList$.asObservable();
-  };
 
   startGame() {
     console.log('game started');

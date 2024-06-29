@@ -22,7 +22,11 @@ export class AppComponent {
   }
   submit(name: string) {
     if (!name) return;
-    this.userService.sendNewUser(name);
+    this.userService.sendNewUser(name).subscribe((user) => {
+      localStorage.setItem('userId', user.id?.toString() ?? '');
+      localStorage.setItem('userName', user.name);
+    });
+
     this.inLobby = true;
   }
 }

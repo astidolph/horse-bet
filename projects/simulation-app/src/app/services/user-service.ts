@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { io } from 'socket.io-client';
 import { User } from '../../../../player-app/src/app/models/user';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -16,9 +15,9 @@ export class UserService {
 
   public getNewUser = () => {
     this.socket.on('newUser', (user) => {
-      this.userList$
-        .pipe(takeUntilDestroyed())
-        .subscribe((users) => this.userList$.next([...users, user]));
+      const currentUsers = this.userList$.value;
+      currentUsers.push(user);
+      this.userList$.next(currentUsers);
     });
 
     return this.userList$.asObservable();

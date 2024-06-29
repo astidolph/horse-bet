@@ -20,7 +20,10 @@ export class BettingPanelComponent implements OnInit {
   constructor(
     private horseService: HorseManagementService,
     private bettingService: BettingService
-  ) {}
+  ) {
+    console.log(localStorage.getItem('userId'));
+    console.log(localStorage.getItem('userName'));
+  }
 
   ngOnInit(): void {
     this.horseService.getHorses().subscribe(
