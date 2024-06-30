@@ -24,7 +24,6 @@ export class AppComponent implements OnInit {
   @ViewChild('lobby', { static: true })
   lobbyDialog!: ElementRef<HTMLDialogElement>;
   userList$ = new Observable<User[]>();
-  userJoined = false;
   gameStarted = false;
   constructor(
     private horseManagementService: HorseManagementService,
