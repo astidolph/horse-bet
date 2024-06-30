@@ -13,7 +13,7 @@
 <dialog #lobby>
   <h1>HORSE GAME</h1>
   <ul>
-    @for (user of userList; track $index) {
+    @for (user of userList$ | async; track $index) {
     <li>{{ user.id }} : {{ user.name }}</li>
     }
   </ul>

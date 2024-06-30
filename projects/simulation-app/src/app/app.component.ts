@@ -5,19 +5,26 @@ import { OddsPanelComponent } from './components/odds-panel/odds-panel.component
 import { BettingPanelComponent } from './components/betting-panel/betting-panel.component';
 import { UserService } from './services/user-service';
 import { User } from '../../../player-app/src/app/models/user';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [CourseComponent, OddsPanelComponent, BettingPanelComponent],
+  imports: [
+    CourseComponent,
+    OddsPanelComponent,
+    BettingPanelComponent,
+    AsyncPipe,
+  ],
 })
 export class AppComponent implements OnInit {
   @ViewChild('lobby', { static: true })
   lobbyDialog!: ElementRef<HTMLDialogElement>;
   newUser = '';
-  userList: User[] = [];
+  userList$ = new Observable<User[]>();
   userJoined = false;
   gameStarted = false;
   constructor(
@@ -37,9 +44,7 @@ export class AppComponent implements OnInit {
       }
     });
 
-    this.userService.getNewUser().subscribe((users: User[]) => {
-      this.userList = users;
-    });
+    this.userList$ = this.userService.getNewUser();
 
     this.userService
       .hasGameStarted()
