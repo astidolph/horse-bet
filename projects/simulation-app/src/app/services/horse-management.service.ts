@@ -55,17 +55,28 @@ export class HorseManagementService {
   public getHorses(): void {
     this.http.get<Horse[]>(`${this.apiUrl}/api/horses`).subscribe((horses) => {
       if (horses.length > 0) {
-        this.horses$.next(horses);
+        this.setHorses(horses);
       } else {
-        this.generateHorses();
+        const horses = this.generateHorses();
+        this.setHorses(horses);
       }
     });
   }
 
-  private generateHorses(): void {
-    const currentHorses = this.horses$.value;
+  setHorses(horses: Horse[]) {
+    this.totalOdds = horses.reduce((acc, obj) => acc + obj.odds, 0);
+    horses.forEach((h) => {
+      h.percentageOdds = this.generatePercentageOdds(this.totalOdds, h.odds);
+      h.fractionalOdds = this.generateFractionalOdds(this.totalOdds, h.odds);
+      h.decimalOdds = this.generateDecimalOdds(this.totalOdds, h.odds);
+    });
+    this.generateOddsTable();
+  }
+
+  private generateHorses(): Horse[] {
+    const generatedHorses = this.horses$.value;
     for (let i = 1; i < NUM_HORSES + 1; i++) {
-      currentHorses.push({
+      generatedHorses.push({
         name: this.getHorseName(),
         odds: this.generateOdds(),
         percentageOdds: 0,
@@ -77,19 +88,10 @@ export class HorseManagementService {
       });
     }
 
-    this.totalOdds = currentHorses.reduce((acc, obj) => acc + obj.odds, 0);
+    this.horses$.next(generatedHorses);
+    this.socket.emit('generateHorses', generatedHorses);
 
-    currentHorses.forEach((h) => {
-      h.percentageOdds = this.generatePercentageOdds(this.totalOdds, h.odds);
-      h.fractionalOdds = this.generateFractionalOdds(this.totalOdds, h.odds);
-      h.decimalOdds = this.generateDecimalOdds(this.totalOdds, h.odds);
-    });
-
-    this.horses = currentHorses;
-
-    this.socket.emit('generateHorses', currentHorses);
-
-    this.generateOddsTable();
+    return generatedHorses;
   }
 
   private generatePercentageOdds(totalOdds: number, odd: number): number {
