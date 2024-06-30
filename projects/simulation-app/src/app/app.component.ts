@@ -23,7 +23,6 @@ import { AsyncPipe } from '@angular/common';
 export class AppComponent implements OnInit {
   @ViewChild('lobby', { static: true })
   lobbyDialog!: ElementRef<HTMLDialogElement>;
-  newUser = '';
   userList$ = new Observable<User[]>();
   userJoined = false;
   gameStarted = false;
