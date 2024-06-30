@@ -26,13 +26,13 @@ import { HorseManagementService } from '../../services/horse-management.service'
   ],
 })
 export class CourseComponent {
-  horses: Horse[] = [];
+  horses$ = new Observable<Horse[]>();
   raceStarted$ = new Observable<boolean>();
   raceFinished$ = new Observable<boolean>();
   timingFunction = '';
 
   constructor(private horseManagementService: HorseManagementService) {
-    this.horses = this.horseManagementService.horses;
+    this.horses$ = this.horseManagementService.horses;
     this.raceStarted$ = this.horseManagementService.raceStarted;
     this.raceFinished$ = this.horseManagementService.raceFinished;
   }

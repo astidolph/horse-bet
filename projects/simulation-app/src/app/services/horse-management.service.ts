@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, timeout } from 'rxjs';
+import { BehaviorSubject, Observable, of, timeout } from 'rxjs';
 import { Horse } from '../classes/horse';
 import { horseNames } from '../../assets/horse-names';
 import { io } from 'socket.io-client';
+import { HttpClient } from '@angular/common/http';
 
 const RACE_LENGTH = 90;
 const NUM_HORSES = 10;
@@ -13,14 +14,24 @@ const HORSE_FINISH_TIME_DIFFERENCIAL = 40;
   providedIn: 'root',
 })
 export class HorseManagementService {
-  socket = io('http://localhost:3000');
+  private apiUrl = 'http://localhost:3000';
+  private socket = io(this.apiUrl);
 
-  private _horses: Horse[] = [];
+  private horses$ = new BehaviorSubject<Horse[]>([]);
+  // public horses: Horse[] = [];
   private _results: Horse[] = [];
   private raceStarted$ = new BehaviorSubject<boolean>(false);
   private raceFinished$ = new BehaviorSubject<boolean>(false);
   private totalOdds = 0;
   private oddsTable: Horse[] = [];
+
+  get horses(): Observable<Horse[]> {
+    return this.horses$.asObservable();
+  }
+
+  set horses(horses: Horse[]) {
+    this.horses$.next(horses);
+  }
 
   get raceStarted(): Observable<boolean> {
     return this.raceStarted$.asObservable();
@@ -35,19 +46,23 @@ export class HorseManagementService {
     setTimeout(() => this.raceFinished$.next(true), RACE_LENGTH * 1000);
   }
 
-  get horses() {
-    return this._horses;
-  }
-
   get results() {
     return this._results;
   }
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  generateHorses() {
+  getHorses(): void {
+    this.http.get<Horse[]>(`${this.apiUrl}/api/horses`).subscribe((h) => {
+      this.horses = h;
+      this.generateOddsTable();
+    });
+  }
+
+  generateHorses(): void {
+    const currentHorses = this.horses$.value;
     for (let i = 1; i < NUM_HORSES + 1; i++) {
-      this.horses.push({
+      currentHorses.push({
         name: this.getHorseName(),
         odds: this.generateOdds(),
         percentageOdds: 0,
@@ -59,15 +74,17 @@ export class HorseManagementService {
       });
     }
 
-    this.totalOdds = this.horses.reduce((acc, obj) => acc + obj.odds, 0);
+    this.totalOdds = currentHorses.reduce((acc, obj) => acc + obj.odds, 0);
 
-    this.horses.forEach((h) => {
+    currentHorses.forEach((h) => {
       h.percentageOdds = this.generatePercentageOdds(this.totalOdds, h.odds);
       h.fractionalOdds = this.generateFractionalOdds(this.totalOdds, h.odds);
       h.decimalOdds = this.generateDecimalOdds(this.totalOdds, h.odds);
     });
 
-    this.socket.emit('generateHorses', this.horses);
+    this.horses = currentHorses;
+
+    this.socket.emit('generateHorses', currentHorses);
 
     this.generateOddsTable();
   }
@@ -95,7 +112,8 @@ export class HorseManagementService {
       let randomHorseNameIndex = Math.floor(Math.random() * horseNames.length);
       horseName = horseNames[randomHorseNameIndex];
 
-      if (!this.horses.some((x) => x.name === horseName)) nameFound = true;
+      if (!this.horses$.value.some((x) => x.name === horseName))
+        nameFound = true;
     }
     return horseName;
   }
@@ -208,7 +226,7 @@ export class HorseManagementService {
   }
 
   private generateOddsTable() {
-    this.horses.forEach((h) => {
+    this.horses$.value.forEach((h) => {
       for (let i = 0; i < h.odds; i++) {
         this.oddsTable.push(h);
       }
@@ -218,7 +236,7 @@ export class HorseManagementService {
   }
 
   private setHorseSpeed(speed: number, horse: Horse): void {
-    let horseFound = this.horses.find((x) => x.name === horse.name);
+    let horseFound = this.horses$.value.find((x) => x.name === horse.name);
 
     if (!horseFound) {
       console.log('Couldnt find the horse to give speed');

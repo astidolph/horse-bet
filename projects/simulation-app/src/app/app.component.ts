@@ -23,11 +23,19 @@ export class AppComponent implements OnInit {
   constructor(
     private horseManagementService: HorseManagementService,
     private userService: UserService
-  ) {
-    this.horseManagementService.generateHorses();
-  }
+  ) {}
+
   ngOnInit() {
-    this.lobbyDialog.nativeElement.showModal();
+    // TODO: Need to move horse generation to server-side
+    this.userService.getGameState().subscribe((gameState) => {
+      this.gameStarted = gameState[0].gameStarted;
+      if (this.gameStarted) {
+        this.horseManagementService.getHorses();
+      } else {
+        this.horseManagementService.generateHorses();
+        this.lobbyDialog.nativeElement.showModal();
+      }
+    });
 
     this.userService.getNewUser().subscribe((users: User[]) => {
       this.userList = users;

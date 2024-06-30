@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS gameState (
     gameStarted BOOLEAN
 );
 
+INSERT INTO gameState (gameStarted) VALUES (0);
+
 CREATE TABLE IF NOT EXISTS horse (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,

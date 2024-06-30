@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { io } from 'socket.io-client';
 import { User } from '../../../../player-app/src/app/models/user';
+import { GameState } from '../classes/game-state';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +11,10 @@ import { User } from '../../../../player-app/src/app/models/user';
 export class UserService {
   public userList$ = new BehaviorSubject<User[]>([]);
   public gameStarted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  socket = io('http://localhost:3000');
+  private apiUrl = 'http://localhost:3000';
+  private socket = io(this.apiUrl);
 
   public getNewUser = () => {
     this.socket.on('newUser', (user) => {
@@ -26,6 +29,10 @@ export class UserService {
   startGame() {
     console.log('game started');
     this.socket.emit('startGame');
+  }
+
+  getGameState(): Observable<GameState[]> {
+    return this.http.get<GameState[]>(`${this.apiUrl}/api/gameState`);
   }
 
   hasGameStarted() {

@@ -23,13 +23,11 @@ export class BettingPanelComponent {
     private bettingService: BettingService
   ) {
     this.players = playerNames;
-    var horses = this.horseManagementService.horses;
-
-    this.bettingService.createPlayerBetsModel(this.players, horses);
-
-    this.playerBets = this.bettingService.playerBets;
-
-    this.selectedPlayersBet = this.playerBets[0];
+    this.horseManagementService.horses.subscribe((horses) => {
+      this.bettingService.createPlayerBetsModel(this.players, horses);
+      this.playerBets = this.bettingService.playerBets;
+      this.selectedPlayersBet = this.playerBets[0];
+    });
   }
 
   selectPlayersBets(player: string) {

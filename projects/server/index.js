@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const socketIo = require("socket.io");
 const cors = require("cors");
 const { setupDatabase } = require("./db");
-const { setupSocketHandlers } = require("./socketHandlers");
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -41,7 +40,7 @@ async function main() {
 
     app.get("/api/gameState", async (req, res) => {
       try {
-        const rows = await db.all("SELECT * FROM gameState");
+        const rows = await db.all("SELECT * FROM gameState LIMIT 1");
         res.json(rows);
       } catch (err) {
         console.error("Database query error:", err.message);
@@ -94,7 +93,8 @@ async function main() {
     socket.on("startGame", async () => {
       console.log("game started");
       try {
-        await db.run("INSERT INTO gameState (gameStarted) VALUES (?)", true);
+        // TODO: not happy with the way this is setup
+        await db.run("UPDATE gameState SET gameStarted = 1");
       } catch (e) {
         console.error("Failed to start game:", e);
         return;

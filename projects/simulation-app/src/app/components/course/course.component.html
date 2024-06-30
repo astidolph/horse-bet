@@ -2,7 +2,7 @@
   <div class="horse-container">
     <div
       class="horse"
-      *ngFor="let horse of horses; let idx = index"
+      *ngFor="let horse of horses$ | async; let idx = index"
       [style.top]="(idx + 0.5) * 5 + '%'"
       [class.gallop]="(raceStarted$ | async) && !(raceFinished$ | async)"
       [@horseMove]="{

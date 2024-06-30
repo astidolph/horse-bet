@@ -20,11 +20,11 @@ import { HorseFinishResultsComponent } from '../horse-finish-results/horse-finis
   ],
 })
 export class OddsPanelComponent {
-  horses: Horse[] = [];
+  horses$ = new Observable<Horse[]>();
   raceStarted = new Observable<boolean>();
 
   constructor(private horseManagementService: HorseManagementService) {
-    this.horses = this.horseManagementService.horses;
+    this.horses$ = this.horseManagementService.horses;
     this.raceStarted = this.horseManagementService.raceStarted;
   }
 

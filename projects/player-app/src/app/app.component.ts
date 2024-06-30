@@ -17,6 +17,10 @@ export class AppComponent {
   gameStarted = false;
   constructor(private userService: UserService) {
     this.userService
+      .getGameState()
+      .subscribe((gameState) => (this.gameStarted = gameState[0].gameStarted));
+
+    this.userService
       .hasGameStarted()
       .subscribe((gameStarted) => (this.gameStarted = gameStarted));
   }
