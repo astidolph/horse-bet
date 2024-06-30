@@ -34,12 +34,7 @@ export class AppComponent implements OnInit {
     // TODO: Need to move horse generation to server-side
     this.userService.getGameState().subscribe((gameState) => {
       this.gameStarted = gameState[0].gameStarted;
-      if (this.gameStarted) {
-        this.horseManagementService.getHorses();
-      } else {
-        this.horseManagementService.generateHorses();
-        this.lobbyDialog.nativeElement.showModal();
-      }
+      if (!this.gameStarted) this.lobbyDialog.nativeElement.showModal();
     });
 
     this.userList$ = this.userService.getNewUser();

@@ -33,7 +33,10 @@ export class CourseComponent {
 
   constructor(private horseManagementService: HorseManagementService) {
     this.horses$ = this.horseManagementService.horses;
+    // this.horses$ = this.horseManagementService.horses;
     this.raceStarted$ = this.horseManagementService.raceStarted;
     this.raceFinished$ = this.horseManagementService.raceFinished;
+
+    this.horseManagementService.getHorses();
   }
 }

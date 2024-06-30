@@ -52,14 +52,17 @@ export class HorseManagementService {
 
   constructor(private http: HttpClient) {}
 
-  getHorses(): void {
-    this.http.get<Horse[]>(`${this.apiUrl}/api/horses`).subscribe((h) => {
-      this.horses = h;
-      this.generateOddsTable();
+  public getHorses(): void {
+    this.http.get<Horse[]>(`${this.apiUrl}/api/horses`).subscribe((horses) => {
+      if (horses.length > 0) {
+        this.horses$.next(horses);
+      } else {
+        this.generateHorses();
+      }
     });
   }
 
-  generateHorses(): void {
+  private generateHorses(): void {
     const currentHorses = this.horses$.value;
     for (let i = 1; i < NUM_HORSES + 1; i++) {
       currentHorses.push({
