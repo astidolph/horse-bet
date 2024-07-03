@@ -16,6 +16,7 @@ export class BettingPanelComponent implements OnInit {
   horses: HorseWithBet[] = [];
   money = 1000;
   playerId = 1;
+  betMade = false;
 
   constructor(
     private horseService: HorseManagementService,
@@ -46,8 +47,6 @@ export class BettingPanelComponent implements OnInit {
       return;
     }
 
-    this.bettingService.makeBet(1, horseId, amount);
-
     console.log(
       `${this.playerId} bet amount: ${amount} current money: ${this.money}`
     );
@@ -66,5 +65,12 @@ export class BettingPanelComponent implements OnInit {
       (h) => h.id === horseId
     )?.betAmount;
     return this.money - amount + (currentHorseBet ?? 0);
+  }
+
+  makeBet(): void {
+    this.betMade = true;
+    this.horses
+      .filter((h) => h.betAmount > 0)
+      .forEach((h) => this.bettingService.makeBet(1, h.id, h.betAmount));
   }
 }

@@ -1,5 +1,5 @@
 export class Horse {
-  id?: number;
+  id!: number;
   name!: string;
   odds: number = 0;
   percentageOdds: number = 0;
