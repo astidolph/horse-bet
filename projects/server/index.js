@@ -150,6 +150,8 @@ async function main() {
           "INSERT OR REPLACE INTO playerBets (horseId, userId, amount) VALUES (?, ?, ?)",
           [horseId, playerId, amount]
         );
+
+        await db.run("UPDATE user SET betReady = 1 WHERE id = ?", playerId);
       } catch (e) {
         console.error("Failed to make bet:", e);
         return;

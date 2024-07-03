@@ -5,11 +5,12 @@ DROP TABLE IF EXISTS horse;
 
 CREATE TABLE IF NOT EXISTS user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE
+    name TEXT UNIQUE,
+    betReady BOOLEAN default false
 );
 
 CREATE TABLE IF NOT EXISTS gameState (
-    gameStarted BOOLEAN
+    gameStarted BOOLEAN default false
 );
 
 INSERT INTO gameState (gameStarted) VALUES (0);
