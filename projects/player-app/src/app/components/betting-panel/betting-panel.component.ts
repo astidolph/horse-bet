@@ -15,15 +15,23 @@ import { HorseWithBet } from '../../models/player-bet';
 export class BettingPanelComponent implements OnInit {
   horses: HorseWithBet[] = [];
   money = 1000;
-  playerId = 1;
+  playerId!: number;
+  playerName: string | null = null;
   betMade = false;
 
   constructor(
     private horseService: HorseManagementService,
     private bettingService: BettingService
   ) {
-    console.log(localStorage.getItem('userId'));
-    console.log(localStorage.getItem('userName'));
+    const userId = localStorage.getItem('userId');
+    if (userId !== null) {
+      this.playerId = parseInt(userId);
+    }
+    console.log(userId);
+
+    const userName = localStorage.getItem('userName');
+    this.playerName = userName;
+    console.log(userName);
   }
 
   ngOnInit(): void {
@@ -71,6 +79,8 @@ export class BettingPanelComponent implements OnInit {
     this.betMade = true;
     this.horses
       .filter((h) => h.betAmount > 0)
-      .forEach((h) => this.bettingService.makeBet(1, h.id, h.betAmount));
+      .forEach((h) =>
+        this.bettingService.makeBet(this.playerId, h.id, h.betAmount)
+      );
   }
 }
