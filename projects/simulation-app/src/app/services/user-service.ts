@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { io } from 'socket.io-client';
-import { User } from '../../../../player-app/src/app/models/user';
 import { GameState } from '../classes/game-state';
 import { HttpClient } from '@angular/common/http';
+import { User } from '../classes/user';
 
 @Injectable({
   providedIn: 'root',

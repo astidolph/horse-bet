@@ -2,9 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CourseComponent } from './components/course/course.component';
 import { OddsPanelComponent } from './components/odds-panel/odds-panel.component';
 import { UserService } from './services/user-service';
-import { User } from '../../../player-app/src/app/models/user';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { User } from './classes/user';
 
 @Component({
   selector: 'app-root',
