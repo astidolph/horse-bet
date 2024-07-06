@@ -12,11 +12,17 @@ export class PlayerBets {
 }
 
 export class PlayerHorseBet {
-  public horse!: Horse;
+  public horse: Horse;
   public bet: number = 0;
 
   constructor(horse: Horse, bet: number) {
     this.horse = horse;
     this.bet = bet;
   }
+}
+
+export class FlatPlayerHorseBet {
+  public horseId!: string;
+  public playerId!: number;
+  public amount: number = 0;
 }
