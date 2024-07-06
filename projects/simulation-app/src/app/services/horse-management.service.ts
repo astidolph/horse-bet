@@ -71,6 +71,7 @@ export class HorseManagementService {
       h.decimalOdds = this.generateDecimalOdds(this.totalOdds, h.odds);
     });
     this.generateOddsTable();
+    this.horses = horses;
   }
 
   private generateHorses(): Horse[] {
@@ -88,7 +89,6 @@ export class HorseManagementService {
       });
     }
 
-    this.horses$.next(generatedHorses);
     this.socket.emit('generateHorses', generatedHorses);
 
     return generatedHorses;
