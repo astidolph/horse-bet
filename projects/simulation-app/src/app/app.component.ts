@@ -37,7 +37,9 @@ export class AppComponent implements OnInit {
       if (!this.gameStarted) this.lobbyDialog.nativeElement.showModal();
     });
 
-    this.userList$ = this.userService.getNewUser();
+    this.userService.newUserListener();
+
+    this.userList$ = this.userService.userList;
 
     this.userService
       .hasGameStarted()

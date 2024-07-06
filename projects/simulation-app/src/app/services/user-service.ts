@@ -9,21 +9,38 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class UserService {
-  public userList$ = new BehaviorSubject<User[]>([]);
-  public gameStarted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  constructor(private http: HttpClient) {}
-
   private apiUrl = 'http://localhost:3000';
   private socket = io(this.apiUrl);
 
-  public getNewUser = () => {
+  private userList$ = new BehaviorSubject<User[]>([]);
+  public gameStarted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  get userList(): Observable<User[]> {
+    return this.userList$.asObservable();
+  }
+
+  set userList(users: User[]) {
+    this.userList$.next(users);
+  }
+
+  constructor(private http: HttpClient) {
+    let users = localStorage.getItem('users');
+    if (users) {
+      let parsedUsers = JSON.parse(users);
+      this.userList$.next(parsedUsers);
+    }
+  }
+
+  public newUserListener = () => {
     this.socket.on('newUser', (user) => {
       const currentUsers = this.userList$.value;
       currentUsers.push(user);
-      this.userList$.next(currentUsers);
+      this.userList = currentUsers;
+      localStorage.setItem(
+        'users',
+        JSON.stringify([...this.userList$.value, user])
+      );
     });
-
-    return this.userList$.asObservable();
   };
 
   startGame() {
