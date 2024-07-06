@@ -48,7 +48,7 @@ export class BetResultsComponent {
   }
 
   public sumPlayerBets(bets: PlayerHorseBet[]) {
-    if (bets.length === 0) return;
+    if (bets.length === 0) return 0;
     return bets.map((x) => x.bet).reduce((acc, val) => acc + val);
   }
 

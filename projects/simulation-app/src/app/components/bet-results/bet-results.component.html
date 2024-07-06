@@ -11,6 +11,7 @@
     @for (playerBet of playerBets$ | async; track $index) {
     <tr>
       <td>{{ playerBet.playerId }}</td>
+      <td>{{ sumPlayerBets(playerBet.bets) }}</td>
     </tr>
     }
     <!-- <tr *ngFor="let playerBet of playerBets; let idx = index">
