@@ -24,6 +24,7 @@ export class UserService {
   }
 
   constructor(private http: HttpClient) {
+    localStorage.clear();
     let users = localStorage.getItem('users');
     if (users) {
       let parsedUsers = JSON.parse(users);

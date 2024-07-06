@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Horse } from '../../classes/horse';
 import { PlayerBets, PlayerHorseBet } from '../../classes/player-bets';
-import { BettingService } from '../../services/betting.service';
 import { HorseManagementService } from '../../services/horse-management.service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-bet-results',
@@ -14,17 +14,21 @@ import { HorseManagementService } from '../../services/horse-management.service'
   imports: [CommonModule],
 })
 export class BetResultsComponent {
-  public playerBets: PlayerBets[] = [];
+  // public playerBets: PlayerBets[] = [];
+  public playerBets$ = new Observable<PlayerBets[]>();
   public winningHorses: Horse[] = [];
   // private stakeSplit = 1;
   public raceFinished$ = new Observable<boolean>();
 
   constructor(
-    private bettingService: BettingService,
-    private horseManagementService: HorseManagementService
+    private horseManagementService: HorseManagementService,
+    private userService: UserService
   ) {
     this.raceFinished$ = this.horseManagementService.raceFinished;
-    this.playerBets = this.bettingService.playerBets;
+    this.playerBets$ = this.userService.userList.pipe(
+      map((users) => users.map((u) => new PlayerBets(u.id, [])))
+    );
+    // this.playerBets = this.bettingService.playerBets;
     // let topHorseSpeed = this.horseManagementService.results
     //   .map((x) => x.speed)
     //   .reduce((accumulatedValue, currentValue) =>

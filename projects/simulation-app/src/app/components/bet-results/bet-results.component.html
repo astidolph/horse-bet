@@ -1,14 +1,19 @@
 <table>
-    <thead>
+  <thead>
     <tr>
-        <th>Name</th>
-        <th>Total Bet</th>
-        <th>Bets</th>
-        <th>Gained/Lost</th>
+      <th>Name</th>
+      <th>Total Bet</th>
+      <th>Bets</th>
+      <th>Gained/Lost</th>
     </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let playerBet of playerBets; let idx = index">
+  </thead>
+  <tbody>
+    @for (playerBet of playerBets$ | async; track $index) {
+    <tr>
+      <td>{{ playerBet.playerId }}</td>
+    </tr>
+    }
+    <!-- <tr *ngFor="let playerBet of playerBets; let idx = index">
         <td>{{ playerBet.player }}</td>
         <td>{{ sumPlayerBets(playerBet.bets) }}</td>
         <td>
@@ -29,6 +34,6 @@
                 <div class="racing-load"></div>
             </ng-template>
         </td>
-    </tr>
-    </tbody>
+    </tr> -->
+  </tbody>
 </table>
