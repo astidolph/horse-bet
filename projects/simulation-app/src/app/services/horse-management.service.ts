@@ -52,6 +52,10 @@ export class HorseManagementService {
 
   constructor(private http: HttpClient) {}
 
+  public getHorseById(horseId: string): Horse | undefined {
+    return this.horses$.value.find((h) => h.id === horseId);
+  }
+
   public getHorses(): void {
     this.http.get<Horse[]>(`${this.apiUrl}/api/horses`).subscribe((horses) => {
       if (horses.length > 0) {

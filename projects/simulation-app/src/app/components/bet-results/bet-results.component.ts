@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { Horse } from '../../classes/horse';
 import { PlayerBets, PlayerHorseBet } from '../../classes/player-bets';
 import { HorseManagementService } from '../../services/horse-management.service';
-import { UserService } from '../../services/user-service';
+import { BettingService } from '../../services/betting.service';
 
 @Component({
   selector: 'app-bet-results',
@@ -22,12 +22,11 @@ export class BetResultsComponent {
 
   constructor(
     private horseManagementService: HorseManagementService,
-    private userService: UserService
+    private bettingService: BettingService
   ) {
     this.raceFinished$ = this.horseManagementService.raceFinished;
-    this.playerBets$ = this.userService.userList.pipe(
-      map((users) => users.map((u) => new PlayerBets(u.id, [])))
-    );
+    this.playerBets$ = this.bettingService.playerBets;
+    this.bettingService.newBetListener();
     // this.playerBets = this.bettingService.playerBets;
     // let topHorseSpeed = this.horseManagementService.results
     //   .map((x) => x.speed)
