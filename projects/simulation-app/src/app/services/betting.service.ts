@@ -29,10 +29,10 @@ export class BettingService {
 
   constructor(private horseManagementService: HorseManagementService) {}
 
+  // TODO: Will need to revisit the way bets are set
   public newBetListener = () => {
     // Since you can only make bets once we don't have to check for any modifications we just set all bets for the player
     this.socket.on('betMade', (playerBet: FlatPlayerHorseBet) => {
-      // Revisit this setting bet in a map and then converting the model not good
       const { horseId, amount, playerId } = playerBet;
 
       // Try to find horse bet on

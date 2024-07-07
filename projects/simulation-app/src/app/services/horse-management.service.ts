@@ -15,10 +15,8 @@ const HORSE_FINISH_TIME_DIFFERENCIAL = 40;
 })
 export class HorseManagementService {
   private apiUrl = 'http://localhost:3000';
-  private socket = io(this.apiUrl);
 
   private horses$ = new BehaviorSubject<Horse[]>([]);
-  // public horses: Horse[] = [];
   private _results: Horse[] = [];
   private raceStarted$ = new BehaviorSubject<boolean>(false);
   private raceFinished$ = new BehaviorSubject<boolean>(false);
@@ -61,23 +59,20 @@ export class HorseManagementService {
       if (horses.length > 0) {
         this.setHorses(horses);
       } else {
-        const horses = this.generateHorses();
-        this.setHorses(horses);
+        const generatedHorses = this.generateHorses();
+        this.http
+          .post<Horse[]>(`${this.apiUrl}/api/horses`, generatedHorses)
+          .subscribe((horses) => this.setHorses(horses));
       }
     });
   }
 
   setHorses(horses: Horse[]) {
-    this.totalOdds = horses.reduce((acc, obj) => acc + obj.odds, 0);
-    horses.forEach((h) => {
-      h.percentageOdds = this.generatePercentageOdds(this.totalOdds, h.odds);
-      h.fractionalOdds = this.generateFractionalOdds(this.totalOdds, h.odds);
-      h.decimalOdds = this.generateDecimalOdds(this.totalOdds, h.odds);
-    });
     this.generateOddsTable();
     this.horses = horses;
   }
 
+  // TODO: Move horse generation to the server side
   private generateHorses(): Horse[] {
     const generatedHorses = this.horses$.value;
     for (let i = 1; i < NUM_HORSES + 1; i++) {
@@ -93,7 +88,12 @@ export class HorseManagementService {
       });
     }
 
-    this.socket.emit('generateHorses', generatedHorses);
+    this.totalOdds = generatedHorses.reduce((acc, obj) => acc + obj.odds, 0);
+    generatedHorses.forEach((h) => {
+      h.percentageOdds = this.generatePercentageOdds(this.totalOdds, h.odds);
+      h.fractionalOdds = this.generateFractionalOdds(this.totalOdds, h.odds);
+      h.decimalOdds = this.generateDecimalOdds(this.totalOdds, h.odds);
+    });
 
     return generatedHorses;
   }

@@ -88,26 +88,15 @@ async function main() {
       res.json({ message: "Test endpoint works!" });
     });
 
-    // WEB SOCKET CONNECTIONS
-
-    socket.on("startGame", async () => {
-      console.log("game started");
-      try {
-        // TODO: not happy with the way this is setup
-        await db.run("UPDATE gameState SET gameStarted = 1");
-      } catch (e) {
-        console.error("Failed to start game:", e);
-        return;
-      }
-      io.emit("gameStarted", true);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("a user disconnected!");
-    });
-
-    socket.on("generateHorses", async (horses) => {
+    app.post("/api/horses", async (req, res) => {
+      const horses = req.body;
       console.log("generate horses: ", JSON.stringify(horses));
+
+      if (horses.length === 0) {
+        return res
+          .status(400)
+          .json({ error: "No horses received by POST endpoint" });
+      }
 
       // Start a transaction
       await db.run("BEGIN TRANSACTION");
@@ -132,14 +121,33 @@ async function main() {
 
         // Commit the transaction
         await db.run("COMMIT");
+
+        const rows = await db.all("SELECT * FROM horse");
+        res.json(rows);
       } catch (e) {
         // Rollback the transaction in case of an error
         await db.run("ROLLBACK");
         console.error("Failed to save generated horses:", e);
         return;
       }
+    });
 
-      io.emit("horsesGenerated", horses);
+    // WEB SOCKET CONNECTIONS
+
+    socket.on("startGame", async () => {
+      console.log("game started");
+      try {
+        // TODO: not happy with the way this is setup
+        await db.run("UPDATE gameState SET gameStarted = 1");
+      } catch (e) {
+        console.error("Failed to start game:", e);
+        return;
+      }
+      io.emit("gameStarted", true);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("a user disconnected!");
     });
 
     socket.on("makeBet", async (bet) => {
