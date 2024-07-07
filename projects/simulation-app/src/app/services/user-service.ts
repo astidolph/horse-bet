@@ -23,6 +23,10 @@ export class UserService {
     this.userList$.next(users);
   }
 
+  getUserById(userId: number) {
+    return this.userList$.value.find((x) => x.id === userId);
+  }
+
   constructor(private http: HttpClient) {
     localStorage.clear();
     let users = localStorage.getItem('users');

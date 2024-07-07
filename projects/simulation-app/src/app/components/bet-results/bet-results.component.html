@@ -10,7 +10,7 @@
   <tbody>
     @for (playerBet of playerBets$ | async; track $index) {
     <tr>
-      <td>{{ playerBet.playerId }}</td>
+      <td>{{ playerBet.playerName }}</td>
       <td>{{ sumPlayerBets(playerBet.bets) }}</td>
       <td>
         <div

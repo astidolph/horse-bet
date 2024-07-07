@@ -2,11 +2,13 @@ import { Horse } from './horse';
 
 export class PlayerBets {
   public playerId!: number;
+  public playerName!: string;
   public bets: PlayerHorseBet[] = [];
   public winnings: number = 0;
 
-  constructor(playerId: number, bets: PlayerHorseBet[]) {
+  constructor(playerId: number, playerName: string, bets: PlayerHorseBet[]) {
     this.playerId = playerId;
+    this.playerName = playerName;
     this.bets = bets;
   }
 }

@@ -8,6 +8,7 @@ import {
 import { io } from 'socket.io-client';
 import { BehaviorSubject, Observable, ObservedValueOf } from 'rxjs';
 import { HorseManagementService } from './horse-management.service';
+import { UserService } from './user-service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,10 @@ export class BettingService {
     this.playerBets$.next(val);
   }
 
-  constructor(private horseManagementService: HorseManagementService) {}
+  constructor(
+    private horseManagementService: HorseManagementService,
+    private userService: UserService
+  ) {}
 
   // TODO: Will need to revisit the way bets are set
   public newBetListener = () => {
@@ -42,6 +46,7 @@ export class BettingService {
         console.log(
           `Bet received from player ${playerId} but horse ${horseId} not found`
         );
+        return;
       }
 
       // Check if player has made a bet previously
@@ -60,7 +65,17 @@ export class BettingService {
       const playerBetsArray: PlayerBets[] = [];
 
       this.playerBetsMap.forEach((horseBetsMap, playerId) => {
-        const playerBets = new PlayerBets(playerId, []);
+        // Have to retrieve the player name at this stage
+        const playerFound = this.userService.getUserById(playerId);
+
+        if (!playerFound) {
+          console.log(
+            `Bet received from player ${playerId} but could not find player`
+          );
+          return;
+        }
+
+        const playerBets = new PlayerBets(playerId, playerFound?.name, []);
         horseBetsMap.forEach((horseBet) => {
           playerBets.bets.push(horseBet);
         });
