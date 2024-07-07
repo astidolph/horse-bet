@@ -51,6 +51,7 @@ export class BettingService {
 
       // Check if player has made a bet previously
       if (!this.playerBetsMap.has(playerId)) {
+        this.userService.setPlayerMadeBet(playerId);
         this.playerBetsMap.set(playerId, []);
       }
 

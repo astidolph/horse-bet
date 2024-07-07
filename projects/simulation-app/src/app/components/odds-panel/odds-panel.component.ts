@@ -6,6 +6,8 @@ import { OrderByOddsPipe } from '../../pipes/orderByPipe';
 import { HorseManagementService } from '../../services/horse-management.service';
 import { BetResultsComponent } from '../bet-results/bet-results.component';
 import { HorseFinishResultsComponent } from '../horse-finish-results/horse-finish-results.component';
+import { PlayersReadyComponent } from '../players-ready/players-ready.component';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-odds-panel',
@@ -17,13 +19,17 @@ import { HorseFinishResultsComponent } from '../horse-finish-results/horse-finis
     OrderByOddsPipe,
     BetResultsComponent,
     HorseFinishResultsComponent,
+    PlayersReadyComponent,
   ],
 })
 export class OddsPanelComponent {
   horses$ = new Observable<Horse[]>();
   raceStarted = new Observable<boolean>();
 
-  constructor(private horseManagementService: HorseManagementService) {
+  constructor(
+    private horseManagementService: HorseManagementService,
+    public userService: UserService
+  ) {
     this.horses$ = this.horseManagementService.horses;
     this.raceStarted = this.horseManagementService.raceStarted;
   }

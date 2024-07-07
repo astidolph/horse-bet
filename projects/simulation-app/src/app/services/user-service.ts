@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { GameState } from '../classes/game-state';
 import { HttpClient } from '@angular/common/http';
@@ -21,6 +21,14 @@ export class UserService {
 
   set userList(users: User[]) {
     this.userList$.next(users);
+  }
+
+  setPlayerMadeBet(playerId: number) {
+    const currentUserList = this.userList$.value;
+    const currentUser = currentUserList.find((x) => x.id === playerId);
+    if (!currentUser) return;
+    currentUser.betReady = true;
+    this.userList = currentUserList;
   }
 
   getUserById(userId: number) {
