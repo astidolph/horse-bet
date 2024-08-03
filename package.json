@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --project simulation-app",
+    "start": "node project/server/",
     "start:playerApp": "ng serve --project player-app",
-    "server": "node projects/server/.",
-    "build": "ng build",
+    "start:simulationApp": "ng serve --project simulation-app",
+    "build": "ng build --project player-app --configuration production && ng build --project simulation-app --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
